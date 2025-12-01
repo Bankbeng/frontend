@@ -9,6 +9,7 @@ export default function Content() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
     fetchData();
@@ -51,6 +52,10 @@ export default function Content() {
     const category = categories.find(cat => cat.cat_id === catId);
     return category ? category.cat_name : 'Unknown';
   };
+
+  const filteredProducts = selectedCategory === 'all' 
+    ? products 
+    : products.filter(product => product.cat_id === selectedCategory);
 
   if (loading) {
     return (
@@ -135,10 +140,54 @@ export default function Content() {
             <div className="w-16 h-1 bg-gradient-to-r from-green-400 to-transparent rounded-full"></div>
           </div>
         </div>
+
+        {/* Category Filter */}
+        <div className="mb-12">
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className={`px-8 py-3 rounded-full font-bold text-sm transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg ${
+                selectedCategory === 'all'
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white scale-105 shadow-lg'
+                  : 'bg-white text-gray-700 hover:bg-green-50 border-2 border-green-200'
+              }`}
+            >
+              <span className="mr-2">🛍️</span>
+              All Products
+              <span className="ml-2 bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                {products.length}
+              </span>
+            </button>
+            
+            {categories.map((category) => {
+              const categoryCount = products.filter(p => p.cat_id === category.cat_id).length;
+              return (
+                <button
+                  key={category.cat_id}
+                  onClick={() => setSelectedCategory(category.cat_id)}
+                  className={`px-8 py-3 rounded-full font-bold text-sm transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg ${
+                    selectedCategory === category.cat_id
+                      ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white scale-105 shadow-lg'
+                      : 'bg-white text-gray-700 hover:bg-green-50 border-2 border-green-200'
+                  }`}
+                >
+                  {category.cat_name}
+                  <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
+                    selectedCategory === category.cat_id
+                      ? 'bg-white/20'
+                      : 'bg-green-100 text-green-700'
+                  }`}>
+                    {categoryCount}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
         
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {products.map((product, index) => (
+          {filteredProducts.map((product, index) => (
             <div
               key={product.id}
               className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border-2 border-green-100 hover:border-green-300"
@@ -228,6 +277,25 @@ export default function Content() {
             </div>
           ))}
         </div>
+
+        {/* Empty State */}
+        {filteredProducts.length === 0 && products.length > 0 && (
+          <div className="text-center py-24">
+            <div className="bg-white rounded-3xl shadow-2xl p-16 max-w-2xl mx-auto border-4 border-dashed border-green-200">
+              <div className="text-9xl mb-8 animate-bounce">🔍</div>
+              <h3 className="text-4xl font-bold text-gray-700 mb-4">No Products Found</h3>
+              <p className="text-xl text-gray-500 mb-8">
+                No products match the selected category. Try selecting a different category!
+              </p>
+              <button 
+                onClick={() => setSelectedCategory('all')}
+                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-8 rounded-full shadow-xl transform hover:scale-110 transition-all duration-300"
+              >
+                View All Products
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Empty State */}
         {products.length === 0 && (
