@@ -230,16 +230,6 @@ export default function Content() {
                   {product.name}
                 </h3>
 
-                {/* Rating */}
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-sm">⭐</span>
-                    ))}
-                  </div>
-                  <span className="text-sm text-gray-500 font-medium">(4.8)</span>
-                </div>
-
                 {/* Price and Stock */}
                 <div className="flex justify-between items-center mb-5">
                   <div>
