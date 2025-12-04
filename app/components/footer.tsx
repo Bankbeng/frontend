@@ -1,140 +1,83 @@
+// Footer Component
+// This component appears at the bottom of the page
+// It contains: company info, links, and social media
+
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-green-800 to-emerald-900 text-gray-200">
-      <div className="max-w-7xl mx-auto py-12 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8"> 
-          {/* Brand Section */}
-          <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="text-3xl">🍊</div>
-              <h3 className="text-white text-2xl font-bold">Som 'O'</h3>
+    // Footer section with dark green background
+    // bg-green-700: dark green color
+    // text-gray-100: light gray text for readability on dark background
+    <footer className="bg-green-700 text-gray-100">
+      <div className="max-w-7xl mx-auto py-12 px-4">
+        {/* Grid layout: 1 column on mobile, 4 columns on medium+ screens */}
+        {/* gap-8: spacing between columns */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          
+          {/* Column 1: Brand Information */}
+          <div>
+            {/* Company logo and name */}
+            <div className="flex items-center gap-2 mb-4 text-white font-bold text-lg">
+              <span>🍊</span>
+              <span>Som 'O'</span>
             </div>
-            <p className="text-green-200 text-sm mb-4">
-              Your trusted source for fresh drinks and fruits delivered with care.
-            </p>
-            <div className="flex gap-3">
-              <a href="#" className="bg-green-700 hover:bg-green-600 p-2 rounded-full transition transform hover:scale-110">
-                <span className="text-xl">📘</span>
-              </a>
-              <a href="#" className="bg-green-700 hover:bg-green-600 p-2 rounded-full transition transform hover:scale-110">
-                <span className="text-xl">🎵</span>
-              </a>
-              <a href="#" className="bg-green-700 hover:bg-green-600 p-2 rounded-full transition transform hover:scale-110">
-                <span className="text-xl">📷</span>
-              </a>
-              <a href="#" className="bg-green-700 hover:bg-green-600 p-2 rounded-full transition transform hover:scale-110">
-                <span className="text-xl">💬</span>
-              </a>
+            {/* Company description */}
+            <p className="text-sm mb-4">Your trusted source for fresh drinks and fruits.</p>
+            {/* Social media links */}
+            <div className="flex gap-2">
+              <a href="#" className="hover:text-white transition">📘</a>
+              <a href="#" className="hover:text-white transition">🎵</a>
+              <a href="#" className="hover:text-white transition">📷</a>
+              <a href="#" className="hover:text-white transition">💬</a>
             </div>
           </div>
 
-          {/* Company Info */}
+          {/* Column 2: Company Links */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4 flex items-center gap-2">
-              <span>🏢</span> Company
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Press
-                </a>
-              </li>
+            <h3 className="text-white font-bold mb-4">Company</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#" className="hover:text-white transition">About Us</a></li>
+              <li><a href="#" className="hover:text-white transition">Careers</a></li>
+              <li><a href="#" className="hover:text-white transition">Blog</a></li>
+              <li><a href="#" className="hover:text-white transition">Press</a></li>
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Column 3: Support Links */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4 flex items-center gap-2">
-              <span>💡</span> Support
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Shipping Info
-                </a>
-              </li>
+            <h3 className="text-white font-bold mb-4">Support</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#" className="hover:text-white transition">Help Center</a></li>
+              <li><a href="#" className="hover:text-white transition">Contact Us</a></li>
+              <li><a href="#" className="hover:text-white transition">FAQ</a></li>
+              <li><a href="#" className="hover:text-white transition">Shipping Info</a></li>
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Column 4: Legal Links */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4 flex items-center gap-2">
-              <span>⚖️</span> Legal
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Cookie Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-300 transition hover:pl-2 inline-block duration-300">
-                  Refund Policy
-                </a>
-              </li>
+            <h3 className="text-white font-bold mb-4">Legal</h3>
+            <ul className="space-y-2 text-sm">
+              <li><a href="#" className="hover:text-white transition">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-white transition">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-white transition">Cookie Policy</a></li>
+              <li><a href="#" className="hover:text-white transition">Refund Policy</a></li>
             </ul>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-green-700 pt-6 mt-6">
+        {/* Bottom section: Copyright and social links */}
+        {/* border-t: top border to separate sections */}
+        <div className="border-t border-green-600 pt-6">
+          {/* Flex layout: column on mobile, row on medium+ screens */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-green-300">
-              &copy; 2025 Som O. All rights reserved. Made with 💚
-            </p>
-            <div className="flex gap-6">
-              <a href="#" className="text-green-300 hover:text-white transition font-medium">
-                Facebook
-              </a>
-              <a href="#" className="text-green-300 hover:text-white transition font-medium">
-                TikTok
-              </a>
-              <a href="#" className="text-green-300 hover:text-white transition font-medium">
-                Instagram
-              </a>
-              <a href="#" className="text-green-300 hover:text-white transition font-medium">
-                WhatsApp
-              </a>
+            {/* Copyright text */}
+            <p className="text-sm">&copy; 2025 Som O. All rights reserved.</p>
+            {/* Social media links */}
+            <div className="flex gap-6 text-sm">
+              <a href="#" className="hover:text-white transition">Facebook</a>
+              <a href="#" className="hover:text-white transition">TikTok</a>
+              <a href="#" className="hover:text-white transition">Instagram</a>
+              <a href="#" className="hover:text-white transition">WhatsApp</a>
             </div>
           </div>
         </div>

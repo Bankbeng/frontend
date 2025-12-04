@@ -1,36 +1,39 @@
+// Navigation Component
+// This is the header/navbar that appears at the top of every page
+// It contains: logo, menu links, and sign-in button
+
 export default function Nav() {
   return (
-    <nav className="bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-xl">
-      <div className="max-w-7xl mx-auto px-3 py-4">
+    // Navigation bar with green background
+    // bg-green-600: green background color
+    // text-white: white text color
+    // py-4: padding top and bottom (16px)
+    <nav className="bg-green-600 text-white py-4">
+      {/* Container to center content and set max width */}
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Flex layout to arrange items horizontally with space between */}
         <div className="flex justify-between items-center">
-          {/* Logo with icon */}
-          <div className="flex items-center gap-2">
-            <div className="text-3xl">🍊</div>
-            <div className="text-2xl font-bold tracking-wide">Som 'O'</div>
+          
+          {/* Logo Section - Left side */}
+          <div className="flex items-center gap-2 text-2xl font-bold">
+            <span>🍊</span>
+            <span>Som 'O'</span>
           </div>
           
-          {/* Menu Items */}
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-green-200 transition font-medium relative group">
-              Home
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-200 transition-all group-hover:w-full"></span>
-            </a>
-            <a href="#" className="hover:text-green-200 transition font-medium relative group">
-              About
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-200 transition-all group-hover:w-full"></span>
-            </a>
-            <a href="#" className="hover:text-green-200 transition font-medium relative group">
-              Services
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-200 transition-all group-hover:w-full"></span>
-            </a>
-            <a href="#" className="hover:text-green-200 transition font-medium relative group">
-              Contact
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-green-200 transition-all group-hover:w-full"></span>
-            </a>
+          {/* Menu Links - Center */}
+          <div className="flex gap-6">
+            {/* Each link has hover effect that changes text color */}
+            <a href="#" className="hover:text-green-100 transition">Home</a>
+            <a href="#" className="hover:text-green-100 transition">About</a>
+            <a href="#" className="hover:text-green-100 transition">Services</a>
+            <a href="#" className="hover:text-green-100 transition">Contact</a>
           </div>
           
-          {/* CTA Button */}
-          <button className="bg-white text-green-600 px-6 py-2 rounded-full font-semibold hover:bg-green-50 hover:shadow-lg transition transform hover:-translate-y-0.5">
+          {/* Sign In Button - Right side */}
+          {/* bg-white: white background to stand out */}
+          {/* text-green-600: green text color */}
+          {/* hover:bg-gray-100: slightly gray when hovering */}
+          <button className="bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
             Sign In
           </button>
         </div>
