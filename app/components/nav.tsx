@@ -15,7 +15,7 @@ export default function Nav() {
             <a href="#" className="hover:text-green-100 transition">Contact</a>
           </div>
           
-          <button className="bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+          <button className="bg-white text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100">
             Sign In
           </button>
         </div>

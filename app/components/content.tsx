@@ -1,167 +1,135 @@
-// Content Component - Main Product Display
-// 'use client' enables React hooks like useState and useEffect on the client side
-// This component: fetches products/categories from API, displays them in a grid, filters by category
+// CONTENT COMPONENT - Main Product Display (SIMPLIFIED)
+// This handles: fetching data from API and filtering products by category
+// Loading and error states REMOVED for simplicity!
 
+// ==================== STEP 1: IMPORTS ====================
+// 'use client' tells Next.js this code runs in the browser (not on server)
+// This is needed because we use React hooks like useState and useEffect
 'use client';
 
-// Imports from React and Next.js libraries
+// Import React tools for managing state and side effects
 import { useState, useEffect } from 'react';
-import Image from "next/image";
-// Imports API functions from lib/api.js
+
+// Import our custom API functions from lib/api.js file
+// @ symbol is a shortcut for the root directory of your project
 import { getProducts, getCategories } from '@/lib/api';
 
+// ==================== STEP 2: COMPONENT DEFINITION ====================
 export default function Content() {
-  // STATE VARIABLES (using React Hooks)
-  // State stores data that can change and trigger re-renders
   
-  // products: array of product objects
-  // setProducts: function to update products array
+  // ==================== STEP 3: STATE VARIABLES ====================
+  // STATE = data that can change and cause the component to re-render (update)
+  // Think of state as the "memory" of your component
+  
+  // PRODUCTS STATE
+  // products: current value (starts as empty array [])
+  // setProducts: function to update products (like a setter)
+  // When you call setProducts([...new data...]), React re-renders the component
   const [products, setProducts] = useState([]);
   
-  // categories: array of category objects
+  // CATEGORIES STATE
+  // Stores list of categories (e.g., Fruits, Drinks)
   const [categories, setCategories] = useState([]);
   
-  // loading: boolean for showing loading spinner
-  const [loading, setLoading] = useState(true);
-  
-  // error: stores error message if API call fails
-  const [error, setError] = useState(null);
-  
-  // selectedCategory: tracks which category filter is active ('all' or specific cat_id)
+  // SELECTED CATEGORY STATE
+  // Tracks which filter button is active
+  // 'all' = show all products
+  // 1, 2, 3, etc. = show only products from that category ID
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // EFFECT HOOK - Runs once when component mounts
-  // useEffect with empty dependency array [] means "run only on first load"
+  // ==================== STEP 4: EFFECT HOOK ====================
+  // useEffect runs code AFTER component renders
+  // Used for "side effects" like fetching data, timers, subscriptions
+  
+  // The [] (empty dependency array) means: "run ONLY ONCE when component first loads"
+  // If you put [selectedCategory] it would run every time selectedCategory changes
   useEffect(() => {
-    fetchData(); // Call function to get data from API
-  }, []);
+    fetchData(); // Call the fetch function we defined below
+  }, []); // Empty array = run once on mount
 
-  // FETCH DATA FUNCTION - Gets products and categories from API
+  // ==================== STEP 5: FETCH DATA FUNCTION ====================
+  // async function = function that can wait for promises (API calls)
   const fetchData = async () => {
-    try {
-      // Set loading to true while fetching
-      setLoading(true);
-      
-      // Promise.all runs both API calls in parallel (at the same time)
-      // More efficient than waiting for them one by one
-      const [productsResponse, categoriesResponse] = await Promise.all([
-        getProducts(),      // Call API to get all products
-        getCategories()     // Call API to get all categories
-      ]);
-      
-      // Store the data in state
-      // .data extracts the actual data from the API response
-      setProducts(productsResponse.data);
-      setCategories(categoriesResponse.data);
-      setError(null);
-      
-      // Log data to browser console for debugging
-      console.log('Products loaded:', productsResponse.data);
-      console.log('Categories loaded:', categoriesResponse.data);
-    } catch (err) {
-      // If API call fails, catch the error
-      setError('Could not load products from API');
-      console.error('Error loading data:', err);
-      
-      // Show sample data as fallback
-      setProducts([
-        {
-          id: 1,
-          name: "Sample Product 1",
-          price: 29.99,
-          cat_id: 1,
-          image: "/apple.jpg"
-        },
-      ]);
-    } finally {
-      // This runs whether success or error - turn off loading spinner
-      setLoading(false);
-    }
+    // STEP 5A: Fetch data from API
+    // Promise.all() runs multiple async operations AT THE SAME TIME (parallel)
+    // This is faster than doing them one after another (sequential)
+    // It waits for BOTH to complete, then returns array of results
+    const [productsResponse, categoriesResponse] = await Promise.all([
+      getProducts(),      // API call #1: Get all products
+      getCategories()     // API call #2: Get all categories
+    ]);
+    
+    // STEP 5B: Store data in state
+    // .data extracts the actual data from the response object
+    // Calling setProducts/setCategories triggers a re-render with new data
+    setProducts(productsResponse.data);
+    setCategories(categoriesResponse.data);
+    
+    // STEP 5C: Log for debugging
+    // console.log prints to browser console (F12 → Console tab)
+    console.log('Products loaded:', productsResponse.data);
+    console.log('Categories loaded:', categoriesResponse.data);
   };
 
-  // HELPER FUNCTION - Gets the name of a category by its ID
+  // ==================== STEP 6: HELPER FUNCTIONS ====================
+  
+  // FUNCTION: Get category name from ID
+  // Example: getCategoryName(1) returns "Fruits"
   const getCategoryName = (catId) => {
-    // Find the category object that matches this ID
+    // .find() searches array for first item matching condition
+    // cat => cat.cat_id === catId means "find category where cat_id equals catId"
     const category = categories.find(cat => cat.cat_id === catId);
-    // Return category name or 'Unknown' if not found
+    
+    // Ternary operator: condition ? valueIfTrue : valueIfFalse
+    // If category found, return its name; otherwise return 'Unknown'
     return category ? category.cat_name : 'Unknown';
   };
 
-  // FILTER PRODUCTS - Creates a new array of products based on selected category
+  // ==================== STEP 7: FILTER LOGIC ====================
+  // This creates a NEW array based on selectedCategory
+  // It doesn't modify the original products array
+  
   const filteredProducts = selectedCategory === 'all' 
-    ? products  // If 'all' selected, show all products
-    : products.filter(product => product.cat_id === selectedCategory); // Otherwise filter by category
+    ? products  // If 'all' selected, use full products array
+    : products.filter(product => product.cat_id === selectedCategory); 
+    // .filter() creates new array with only items that match condition
+    // Only keep products where cat_id matches selectedCategory
 
-  // LOADING STATE - Show spinner while fetching data
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white py-20 px-4">
-        <div className="flex flex-col items-center justify-center">
-          {/* Spinning loader animation */}
-          {/* animate-spin: CSS animation that rotates the element */}
-          {/* border-t-transparent: makes only one side of the circle visible */}
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent"></div>
-          <p className="text-center text-lg text-gray-700 font-semibold mt-8">
-            Loading products...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // ERROR STATE - Show error message if API fails
-  if (error) {
-    return (
-      <div className="min-h-screen bg-white py-16 px-4">
-        {/* Error message box */}
-        <div className="max-w-md mx-auto text-center bg-red-50 border border-red-300 rounded-lg p-8">
-          <div className="text-4xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-red-700 mb-4">Error Loading Products</h2>
-          <p className="text-gray-700 mb-6 text-sm">{error}</p>
-          <p className="text-gray-600 mb-6 text-xs">Make sure your API is running on http://localhost:3000</p>
-          {/* Button to retry fetching data */}
-          {/* onClick: calls fetchData() function when clicked */}
-          <button 
-            onClick={fetchData}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // SUCCESS STATE - Show products and filters
+  // ==================== STEP 8: MAIN UI ====================
+  
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 py-16">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Products</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-2">
-            Fresh fruits and refreshing drinks
-          </p>
-        </div>
 
-        {/* Category Filter */}
+        {/* ==================== CATEGORY FILTER BUTTONS ==================== */}
+        {/* flex-wrap: allows buttons to wrap to next line on small screens */}
         <div className="mb-8 flex flex-wrap justify-center gap-2">
+          
+          {/* "ALL" BUTTON */}
+          {/* Template literal ${} lets you insert JavaScript into string */}
+          {/* Conditional styling: if selectedCategory === 'all', use green style; else use gray */}
           <button
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => setSelectedCategory('all')}  // Arrow function to set state
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
               selectedCategory === 'all'
-                ? 'bg-green-600 text-white'
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                ? 'bg-green-600 text-white'  // Active style
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'  // Inactive style
             }`}
           >
-            All ({products.length})
+            All ({products.length})  {/* Show total product count */}
           </button>
           
+          {/* CATEGORY BUTTONS - Generated dynamically */}
+          {/* .map() loops through categories array and creates button for each */}
+          {/* map(item => JSX) transforms each item into JSX element */}
           {categories.map((category) => {
+            // Calculate how many products are in this category
+            // .filter() counts products where cat_id matches
             const categoryCount = products.filter(p => p.cat_id === category.cat_id).length;
+            
             return (
               <button
-                key={category.cat_id}
+                key={category.cat_id}  // IMPORTANT: key helps React track which button is which
                 onClick={() => setSelectedCategory(category.cat_id)}
                 className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
                   selectedCategory === category.cat_id
@@ -175,51 +143,70 @@ export default function Content() {
           })}
         </div>
         
-        {/* Products Grid */}
+        {/* ==================== PRODUCTS GRID ==================== */}
+        {/* Responsive grid: 1 column mobile, 2 tablet, 3 laptop, 4 desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          
+          {/* LOOP THROUGH FILTERED PRODUCTS */}
+          {/* Creates a card for each product */}
           {filteredProducts.map((product) => (
             <div
-              key={product.id}
+              key={product.id}  // Key for React's tracking
               className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition overflow-hidden"
             >
-              {/* Product Image */}
+              
+              {/* PRODUCT IMAGE SECTION */}
               <div className="w-full h-48 bg-gray-100 overflow-hidden flex items-center justify-center relative">
+                {/* Conditional rendering: show image if exists, else show placeholder */}
                 {product.image ? (
                   <img
-                    src={product.image}
-                    alt={product.name}
+                    src={product.image}  // Image URL from product data
+                    alt={product.name}   // Alt text for accessibility
                     className="w-full h-full object-cover hover:scale-105 transition"
                   />
                 ) : (
+                  // Fallback if no image
                   <div className="text-center">
                     <div className="text-4xl">🍎</div>
                     <p className="text-xs text-gray-500 mt-2">No Image</p>
                   </div>
                 )}
-                {/* Category Tag */}
+                
+                {/* CATEGORY TAG - Positioned absolutely in top-right corner */}
+                {/* absolute: takes element out of normal flow */}
+                {/* top-2 right-2: position from top and right edges */}
                 <div className="absolute top-2 right-2 bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                  {getCategoryName(product.cat_id)}
+                  {getCategoryName(product.cat_id)}  {/* Call helper function */}
                 </div>
               </div>
 
-              {/* Product Details */}
+              {/* PRODUCT DETAILS SECTION */}
               <div className="p-4">
+                {/* Product Name */}
+                {/* line-clamp-2: limits text to 2 lines, adds ... if longer */}
                 <h3 className="text-sm font-semibold text-gray-800 mb-2 line-clamp-2">
                   {product.name}
                 </h3>
 
-                {/* Price */}
+                {/* PRICE AND STOCK ROW */}
                 <div className="flex justify-between items-center mb-4">
+                  {/* Price - Format to 2 decimal places */}
                   <span className="text-lg font-bold text-green-600">
                     ${typeof product.price === 'number' 
-                      ? product.price.toFixed(2) 
-                      : parseFloat(product.price).toFixed(2)}
+                      ? product.price.toFixed(2)  // If number, format directly
+                      : parseFloat(product.price).toFixed(2)}  {/* If string, convert first */}
                   </span>
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">In Stock</span>
+                  
+                  {/* Stock Badge */}
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                    In Stock
+                  </span>
                 </div>
 
-                {/* Action Buttons */}
+                {/* ACTION BUTTONS */}
                 <div className="flex gap-2">
+                  {/* Add to Cart Button */}
+                  {/* flex-1: takes up all available space */}
                   <button className="flex-1 bg-green-600 text-white py-2 px-3 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
                     Add to Cart
                   </button>
@@ -229,7 +216,10 @@ export default function Content() {
           ))}
         </div>
 
-        {/* Empty State */}
+        {/* ==================== EMPTY STATES ==================== */}
+        
+        {/* EMPTY STATE 1: Category has no products */}
+        {/* Show if filtered list is empty BUT products exist overall */}
         {filteredProducts.length === 0 && products.length > 0 && (
           <div className="text-center py-12">
             <div className="text-4xl mb-4">🔍</div>
@@ -244,7 +234,8 @@ export default function Content() {
           </div>
         )}
 
-        {/* Empty State */}
+        {/* EMPTY STATE 2: No products at all */}
+        {/* Show if products array is completely empty */}
         {products.length === 0 && (
           <div className="text-center py-12">
             <div className="text-4xl mb-4">🛒</div>
@@ -256,3 +247,18 @@ export default function Content() {
     </div>
   );
 }
+
+// ==================== KEY CONCEPTS SUMMARY ====================
+/*
+1. STATE (useState): Component memory that triggers re-renders when changed
+2. EFFECTS (useEffect): Run code after rendering (data fetching, subscriptions)
+3. ASYNC/AWAIT: Handle asynchronous operations (API calls) cleanly
+4. ARRAY METHODS:
+   - .map(): Transform array items into JSX elements (loops)
+   - .filter(): Create new array with items matching condition
+   - .find(): Get first item matching condition
+5. EVENT HANDLERS: onClick={() => code} runs when user clicks
+6. PROPS vs STATE: Props come from parent, State is internal to component
+7. KEY PROP: Helps React track list items efficiently (use unique ID)
+8. CONDITIONAL RENDERING: Show different UI based on conditions (&&, ternary)
+*/
