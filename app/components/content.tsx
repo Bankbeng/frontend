@@ -144,50 +144,39 @@ export default function Content() {
           </p>
         </div>
 
-        {/* CATEGORY FILTER BUTTONS */}
-        {/* Allows user to click and filter products by category */}
+        {/* Category Filter */}
         <div className="mb-8 flex flex-wrap justify-center gap-2">
-          {/* "All Products" button - always visible */}
-          {/* selectedCategory === 'all' ? ... : ... is a ternary operator (if-else in one line) */}
           <button
-            onClick={() => setSelectedCategory('all')}  {/* Update state when clicked */}
+            onClick={() => setSelectedCategory('all')}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
               selectedCategory === 'all'
-                ? 'bg-green-600 text-white'  {/* Active button style (green) */}
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'  {/* Inactive button style (gray) */}
+                ? 'bg-green-600 text-white'
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
             }`}
           >
-            All ({products.length})  {/* Shows count of total products */}
+            All ({products.length})
           </button>
           
-          {/* CATEGORY BUTTONS - Loop through each category and create a button */}
-          {/* .map() creates a new button for each category */}
           {categories.map((category) => {
-            {/* Count how many products are in this category */}
             const categoryCount = products.filter(p => p.cat_id === category.cat_id).length;
             return (
               <button
-                key={category.cat_id}  {/* React needs unique 'key' for lists */}
-                onClick={() => setSelectedCategory(category.cat_id)}  {/* Filter by this category */}
+                key={category.cat_id}
+                onClick={() => setSelectedCategory(category.cat_id)}
                 className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
                   selectedCategory === category.cat_id
-                    ? 'bg-green-600 text-white'  {/* Active style */}
-                    : 'bg-gray-200 text-gray-800 hover:bg-gray-300'  {/* Inactive style */}
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
                 }`}
               >
-                {category.cat_name} ({categoryCount})  {/* Category name and product count */}
+                {category.cat_name} ({categoryCount})
               </button>
             );
           })}
         </div>
         
-        {/* PRODUCTS GRID */}
-        {/* grid: Tailwind's CSS Grid layout system */}
-        {/* grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4: responsive columns */}
-        {/*   - 1 column on phones, 2 on tablets, 3 on laptops, 4 on large screens */}
-        {/* gap-6: spacing between cards */}
+        {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {/* .map() loops through filteredProducts array and creates a card for each */}
           {filteredProducts.map((product) => (
             <div
               key={product.id}
